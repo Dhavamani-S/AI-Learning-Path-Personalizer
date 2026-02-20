@@ -1,0 +1,108 @@
+.navbar {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+
+/* Left */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Center */
+.navbar-center {
+  display: flex;
+  gap: 35px;
+}
+
+.navbar-center a {
+  text-decoration: none;
+  color: #475569;
+  font-weight: 600;
+  transition: 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.navbar-center a:hover {
+  color: #2563eb;
+}
+
+/* Right */
+.navbar-right {
+  display: flex;
+  gap: 15px;
+}
+
+.auth-btn {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid #2563eb;
+  background-color: transparent;
+  color: #2563eb;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: #2563eb;
+  color: white;
+}
+
+.signup {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+}
+
+.signup:hover {
+  background-color: #1d4ed8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 15px 25px;
+  }
+
+  .navbar-center {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .navbar-center {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .navbar-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

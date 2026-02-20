@@ -1,0 +1,123 @@
+/* Prevent full page scroll */
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Main Container */
+.progress-container {
+  padding: 40px;
+  background-color: #f5f7fa;
+  height: 100vh; /* Fixed full screen */
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header Layout */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.progress-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.progress-header p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Download Button */
+.download-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Table Wrapper (Scrollable Area) */
+.table-wrapper {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  overflow-y: auto;        /* Scroll only here */
+  overflow-x: auto;
+}
+
+/* Table */
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.progress-table thead {
+  background-color: #f9fafb;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.progress-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.progress-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.progress-table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Link Styling */
+.resource-link {
+  text-decoration: none;
+  font-weight: 500;
+  color: #2563eb;
+}
+
+.resource-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .progress-container {
+    padding: 20px;
+  }
+
+  .progress-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
