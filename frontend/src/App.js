@@ -5,11 +5,14 @@ import Navbar from "./Navbar";
 import Home from "./pages/Home";
 import Progress from "./pages/Progress";
 import Contact from "./pages/Contact";
+import ModulesPage from "./pages/ModulesPage";
+
 import LoginModal from "./components/LoginModal";
+import SignupModal from "./components/SignupModal";
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
-  const [authMode, setAuthMode] = useState("login");
+  const [showSignup, setShowSignup] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = (user) => {
@@ -20,33 +23,37 @@ function App() {
   return (
     <Router>
       <Navbar
-  onLoginClick={() => {
-    setAuthMode("login");
-    setShowLogin(true);
-  }}
-  onSignupClick={() => {
-    setAuthMode("signup");
-    setShowLogin(true);
-  }}
-/>
-
+        onLoginClick={() => setShowLogin(true)}
+        onSignupClick={() => setShowSignup(true)}
+      />
 
       <Routes>
         <Route
           path="/"
-          element={<Home isLoggedIn={isLoggedIn} onRequireLogin={() => setShowLogin(true)} />}
+          element={
+            <Home
+              isLoggedIn={isLoggedIn}
+              onRequireLogin={() => setShowLogin(true)}
+            />
+          }
         />
-        <Route
-          path="/progress"
-          element={<Progress />}
-        />
+        <Route path="/progress" element={<Progress />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/modules" element={<ModulesPage />} />
       </Routes>
 
+      {/* ✅ Login Modal */}
       <LoginModal
         isOpen={showLogin}
         onClose={() => setShowLogin(false)}
         onLogin={handleLogin}
+      />
+
+      {/* ✅ Signup Modal */}
+      <SignupModal
+      isOpen={showSignup}
+      onClose={() => setShowSignup(false)}
+      onSignup={handleLogin}
       />
     </Router>
   );

@@ -1,38 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Progress.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const Progress = () => {
-  const progressData = [
+  // 🔹 Simulated multiple roadmaps for one user
+  const roadmaps = [
     {
-      day: "Day 1",
-      topic: "HTML Fundamentals",
-      subtopic: "Basic Structure & Tags",
-      link: "https://example.com/html",
-      duration: 2,
+      _id: "1",
+      title: "Frontend Development",
+      progress: [
+        {
+          day: "Day 1",
+          topic: "HTML Fundamentals",
+          subtopic: "Basic Structure & Tags",
+          link: "https://example.com/html",
+          duration: 2,
+        },
+        {
+          day: "Day 2",
+          topic: "CSS Basics",
+          subtopic: "Selectors & Box Model",
+          link: "https://example.com/css",
+          duration: 3,
+        },
+      ],
     },
     {
-      day: "Day 2",
-      topic: "CSS Basics",
-      subtopic: "Selectors & Box Model",
-      link: "https://example.com/css",
-      duration: 3,
-    },
-    {
-      day: "Day 3",
-      topic: "JavaScript",
-      subtopic: "Variables & Functions",
-      link: "https://example.com/js",
-      duration: 4,
+      _id: "2",
+      title: "Backend Development",
+      progress: [
+        {
+          day: "Day 1",
+          topic: "Node.js Basics",
+          subtopic: "Modules & NPM",
+          link: "https://example.com/node",
+          duration: 3,
+        },
+        {
+          day: "Day 2",
+          topic: "Express.js",
+          subtopic: "Routing & Middleware",
+          link: "https://example.com/express",
+          duration: 4,
+        },
+      ],
     },
   ];
+
+  const [selectedRoadmapId, setSelectedRoadmapId] = useState(roadmaps[0]._id);
+
+  const selectedRoadmap = roadmaps.find(
+    (rm) => rm._id === selectedRoadmapId
+  );
 
   const handleDownload = () => {
     const doc = new jsPDF();
 
     doc.setFontSize(16);
-    doc.text("Learning Progress Report", 14, 20);
+    doc.text(`${selectedRoadmap.title} - Learning Progress`, 14, 20);
 
     const tableColumn = [
       "Day",
@@ -42,7 +68,7 @@ const Progress = () => {
       "Duration (Hours)",
     ];
 
-    const tableRows = progressData.map((item) => [
+    const tableRows = selectedRoadmap.progress.map((item) => [
       item.day,
       item.topic,
       item.subtopic,
@@ -55,15 +81,11 @@ const Progress = () => {
       head: [tableColumn],
       body: tableRows,
       theme: "grid",
-      styles: {
-        fontSize: 10,
-      },
-      headStyles: {
-        fillColor: [37, 99, 235],
-      },
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [37, 99, 235] },
     });
 
-    doc.save("Learning_Progress_Report.pdf");
+    doc.save(`${selectedRoadmap.title}_Progress.pdf`);
   };
 
   return (
@@ -71,12 +93,26 @@ const Progress = () => {
       <div className="progress-header">
         <div>
           <h2>Learning Progress</h2>
-          <p>Daily structured learning plan overview</p>
+          <p>Select roadmap to view structured learning plan</p>
         </div>
 
-        <button className="download-btn" onClick={handleDownload}>
-          Download PDF
-        </button>
+        <div className="header-controls">
+  <select
+    className="roadmap-select"
+    value={selectedRoadmapId}
+    onChange={(e) => setSelectedRoadmapId(e.target.value)}
+  >
+    {roadmaps.map((rm) => (
+      <option key={rm._id} value={rm._id}>
+        {rm.title}
+      </option>
+    ))}
+  </select>
+
+  <button className="download-btn" onClick={handleDownload}>
+    Download PDF
+  </button>
+</div>
       </div>
 
       <div className="table-wrapper">
@@ -91,7 +127,7 @@ const Progress = () => {
             </tr>
           </thead>
           <tbody>
-            {progressData.map((item, index) => (
+            {selectedRoadmap.progress.map((item, index) => (
               <tr key={index}>
                 <td>{item.day}</td>
                 <td>{item.topic}</td>

@@ -1,48 +1,80 @@
-/* Prevent full page scroll */
+/* Allow page to scroll naturally */
 body {
   margin: 0;
-  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #f3f6fb, #eaf1ff);
 }
 
 /* Main Container */
 .progress-container {
+  max-width: 1400px;          /* Bigger page */
+  margin: 40px auto;          /* Centered */
   padding: 40px;
-  background-color: #f5f7fa;
-  height: 100vh; /* Fixed full screen */
-  display: flex;
-  flex-direction: column;
-  font-family: "Segoe UI", sans-serif;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
 }
 
-/* Header Layout */
+/* Header */
 .progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  flex-shrink: 0; /* Prevent shrinking */
+  margin-bottom: 30px;
 }
 
 .progress-header h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 32px;            /* Bigger heading */
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
 }
 
 .progress-header p {
-  font-size: 14px;
+  font-size: 15px;
   color: #6b7280;
+  margin-top: 6px;
 }
 
-/* Download Button */
+/* Controls */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Dropdown */
+.roadmap-select {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  min-width: 240px;
+  transition: all 0.3s ease;
+}
+
+.roadmap-select:hover {
+  border-color: #2563eb;
+}
+
+.roadmap-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* Button */
 .download-btn {
   background-color: #2563eb;
   color: #fff;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -53,25 +85,48 @@ body {
   box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
 }
 
-/* Table Wrapper (Scrollable Area) */
+/* Table Wrapper */
 .table-wrapper {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-
-  overflow-y: auto;        /* Scroll only here */
+  margin-top: 20px;
   overflow-x: auto;
 }
 
-/* Table */
+/* TABLE */
 .progress-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;     /* 🔥 FIXES COLUMN SHIFTING */
 }
 
+/* Set fixed column widths */
+.progress-table th:nth-child(1),
+.progress-table td:nth-child(1) {
+  width: 20%;
+}
+
+.progress-table th:nth-child(2),
+.progress-table td:nth-child(2) {
+  width: 20%;
+}
+
+.progress-table th:nth-child(3),
+.progress-table td:nth-child(3) {
+  width: 20%;
+}
+
+.progress-table th:nth-child(4),
+.progress-table td:nth-child(4) {
+  width: 20%;
+}
+
+.progress-table th:nth-child(5),
+.progress-table td:nth-child(5) {
+  width: 20%;
+}
+
+/* Sticky Table Header */
 .progress-table thead {
-  background-color: #f9fafb;
+  background-color: #f3f4f6;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -79,25 +134,27 @@ body {
 
 .progress-table th {
   text-align: left;
-  padding: 14px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  border-bottom: 2px solid #e5e7eb;
+  padding: 18px 20px;     /* Bigger heading space */
+  font-size: 16px;        /* Bigger heading text */
+  font-weight: 700;
+  color: #1f2937;
+  border-bottom: 3px solid #e5e7eb;
 }
 
 .progress-table td {
-  padding: 14px 16px;
-  font-size: 14px;
+  padding: 16px 20px;
+  font-size: 15px;
   color: #4b5563;
   border-bottom: 1px solid #e5e7eb;
+  word-wrap: break-word;  /* Prevent overflow */
 }
 
+/* Row Hover */
 .progress-table tbody tr:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 
-/* Link Styling */
+/* Link */
 .resource-link {
   text-decoration: none;
   font-weight: 500;
@@ -107,17 +164,3 @@ body {
 .resource-link:hover {
   text-decoration: underline;
 }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .progress-container {
-    padding: 20px;
-  }
-
-  .progress-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-}
-

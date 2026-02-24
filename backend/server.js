@@ -4,13 +4,15 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const roadmapRoutes = require("./routes/roadmapRoutes");
+const moduleRoutes = require("./routes/moduleRoutes");
 
 const app = express();
 connectDB();
 app.use(cors());
 app.use(express.json());
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/roadmap", roadmapRoutes);
+app.use("/api/modules", moduleRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend server is running successfully 🚀");

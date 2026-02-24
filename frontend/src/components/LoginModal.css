@@ -1,3 +1,8 @@
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -38,6 +43,13 @@
   background: none;
   font-size: 33px;
   cursor: pointer;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #2563eb;     /* nice red */
+  transform: rotate(90deg) scale(1.1);
 }
 
 .google-btn {
@@ -69,6 +81,7 @@
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .modal-container input:focus {
