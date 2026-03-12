@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./Contact.css";
+import API_URL from "../config";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -7,27 +9,43 @@ const Contact = () => {
     email: "",
     message: ""
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
+    setSuccess("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message Sent Successfully!");
-    setFormData({ name: "", email: "", message: "" });
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await axios.post(`${API_URL}/api/contact`, formData);
+      setSuccess("✅ Message sent successfully! We'll get back to you soon.");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      setError("Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="contact-container">
       <div className="contact-card">
         <div className="contact-header">
-          <h2>Contact Us</h2>
+          <h2>Contact Me</h2>
           <p>Have any questions? Send us a message.</p>
         </div>
+
+        {error && <div className="auth-error">{error}</div>}
+        {success && <div className="contact-success">{success}</div>}
 
         <form className="contact-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -66,8 +84,8 @@ const Contact = () => {
             ></textarea>
           </div>
 
-          <button type="submit" className="send-btn">
-            Send Message
+          <button type="submit" className="send-btn" disabled={loading}>
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

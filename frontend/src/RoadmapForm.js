@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API_URL from "../config";
 
 function RoadmapForm() {
   const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ function RoadmapForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/roadmap/generate", {
+      const res = await fetch(`${API_URL}/api/roadmap/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)

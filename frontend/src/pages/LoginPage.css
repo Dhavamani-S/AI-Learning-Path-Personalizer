@@ -1,50 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-.contact-container {
+.auth-page {
   min-height: 100vh;
-  background: #060612;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 100px 20px 40px;
+  background: #060612;
   font-family: 'DM Sans', sans-serif;
+  padding: 100px 20px 40px;
+  box-sizing: border-box;
   position: relative;
   overflow: hidden;
 }
 
-/* Orbs */
-.contact-container::before {
+.auth-page::before {
   content: '';
   position: fixed;
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   background: radial-gradient(circle, rgba(108,99,255,0.2), transparent 70%);
   border-radius: 50%;
-  top: -100px;
+  top: -150px;
+  left: -150px;
+  pointer-events: none;
+}
+
+.auth-page::after {
+  content: '';
+  position: fixed;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(0,210,255,0.15), transparent 70%);
+  border-radius: 50%;
+  bottom: -100px;
   right: -100px;
   pointer-events: none;
 }
 
-.contact-container::after {
-  content: '';
-  position: fixed;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(0,210,255,0.15), transparent 70%);
-  border-radius: 50%;
-  bottom: -100px;
-  left: -100px;
-  pointer-events: none;
-}
-
 /* Card */
-.contact-card {
-  width: 100%;
-  max-width: 520px;
+.auth-card {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.08);
   padding: 40px;
   border-radius: 24px;
+  width: 100%;
+  max-width: 420px;
   position: relative;
   z-index: 1;
   animation: fadeUp 0.6s ease both;
@@ -55,12 +55,13 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Header */
-.contact-header {
+/* Logo */
+.auth-logo {
+  text-align: center;
   margin-bottom: 28px;
 }
 
-.contact-header h2 {
+.auth-logo h1 {
   font-family: 'Syne', sans-serif;
   font-size: 28px;
   font-weight: 800;
@@ -68,23 +69,84 @@
   margin: 0 0 6px 0;
 }
 
-.contact-header p {
+.auth-logo p {
   font-size: 14px;
   color: rgba(255,255,255,0.4);
   margin: 0;
 }
 
-/* Form */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+/* Error */
+.auth-error {
+  background: rgba(220,38,38,0.1);
+  border: 1px solid rgba(220,38,38,0.3);
+  color: #f87171;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
 }
 
-/* Form Group */
+.error-link {
+  color: #f87171;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Google Button */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-bottom: 16px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.google-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: rgba(255,255,255,0.2);
+  font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Form */
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 16px;
 }
 
 .form-group label {
@@ -96,8 +158,7 @@
   letter-spacing: 0.6px;
 }
 
-.form-group input,
-.form-group textarea {
+.form-group input {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.1);
@@ -109,29 +170,23 @@
   outline: none;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
+.form-group input::placeholder {
   color: rgba(255,255,255,0.2);
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-group input:focus {
   border-color: rgba(108,99,255,0.6);
   background: rgba(108,99,255,0.08);
   box-shadow: 0 0 0 3px rgba(108,99,255,0.1);
 }
 
-.form-group textarea {
-  resize: none;
-  height: 100px;
-}
-
-/* Button */
-.send-btn {
+/* Submit Button */
+.auth-submit-btn {
+  width: 100%;
+  padding: 13px;
   background: linear-gradient(135deg, #6c63ff, #00d2ff);
   color: #fff;
   border: none;
-  padding: 14px;
   border-radius: 999px;
   font-size: 15px;
   font-weight: 600;
@@ -141,23 +196,35 @@
   margin-top: 4px;
 }
 
-.send-btn:hover {
+.auth-submit-btn:hover:not(:disabled) {
   opacity: 0.85;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 10px 30px rgba(108,99,255,0.3);
 }
 
-.contact-success {
-  background: rgba(74,222,128,0.1);
-  border: 1px solid rgba(74,222,128,0.3);
-  color: #4ade80;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  margin-bottom: 16px;
-  text-align: center;
+.auth-submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .contact-card { padding: 28px 20px; }
+/* Switch */
+.auth-switch {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 20px;
+}
+
+.auth-switch a {
+  color: #a78bfa;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .auth-card { padding: 28px 20px; }
 }

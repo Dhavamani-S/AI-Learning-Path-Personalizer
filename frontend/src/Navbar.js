@@ -1,9 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-<Link to="/modules">Modules</Link>
 
-function Navbar({ onLoginClick, onSignupClick }) {
+function Navbar({ isLoggedIn, onLogout }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+    navigate("/login");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -22,16 +28,22 @@ function Navbar({ onLoginClick, onSignupClick }) {
       </div>
 
       <div className="navbar-right">
-        <button className="auth-btn" onClick={onLoginClick}>
-          Login
-        </button>
-
-        <button
-          className="auth-btn signup"
-          onClick={onSignupClick}
-        >
-          Sign Up
-        </button>
+        {isLoggedIn ? (
+          // ✅ Show logout when logged in
+          <button className="auth-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          // ✅ Show login/signup when not logged in
+          <>
+            <button className="auth-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+            <button className="auth-btn signup" onClick={() => navigate("/signup")}>
+              Sign Up
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );

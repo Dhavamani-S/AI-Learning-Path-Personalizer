@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 const User = require("../models/User");
 
 // ✅ REGISTER ROUTE
@@ -9,7 +10,10 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    // ✅ Force lowercase before checking
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists)
       return res.status(400).json({ message: "User already exists" });
 
@@ -17,42 +21,124 @@ router.post("/register", async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
+      authType: "local",
     });
 
     res.status(201).json({
       message: "User registered successfully",
     });
   } catch (error) {
+    console.error("Register error:", error.message);
+    // ✅ Handle MongoDB duplicate key error (email unique index)
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     res.status(500).json({ message: "Server error" });
   }
 });
 
 // ✅ LOGIN ROUTE
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: "User not found" });
+    // ✅ Force lowercase
+    const normalizedEmail = email.toLowerCase().trim();
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    const user = await User.findOne({ email: normalizedEmail });
+    if (!user) return res.status(400).json({ message: "User not found" });
 
-  const token = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+    // ✅ Block manual login for Google users
+    if (user.authType === "google") {
+      return res.status(400).json({
+        message: "This account uses Google Sign-In. Please login with Google.",
+      });
+    }
 
-  res.json({
-    token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-    },
-  });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid credentials" });
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ✅ GOOGLE LOGIN ROUTE
+router.post("/google", async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    console.log("Google login attempt, token preview:", credential?.slice(0, 20));
+
+    const googleRes = await axios.get(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      { headers: { Authorization: `Bearer ${credential}` } }
+    );
+
+    console.log("Google user info received:", googleRes.data);
+
+    const { name, email, sub: googleId } = googleRes.data;
+
+    if (!email) {
+      return res.status(400).json({ message: "Could not get email from Google" });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // ✅ New Google user — create with authType google
+      user = await User.create({
+        name,
+        email,
+        password: googleId,
+        authType: "google", // ✅ Mark as Google user
+      });
+      console.log("New Google user created:", email);
+    } else if (user.authType === "local") {
+      // ✅ Existing local user trying Google — link their account
+      user.authType = "google";
+      await user.save();
+      console.log("Local user linked to Google:", email);
+    } else {
+      console.log("Existing Google user logged in:", email);
+    }
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    console.error("Google login error:", error.response?.data || error.message);
+    res.status(401).json({ message: "Google login failed", detail: error.message });
+  }
 });
 
 module.exports = router;

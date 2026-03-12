@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from "../config";
 
 const ModulesPage = () => {
   const [modules, setModules] = useState([]);
@@ -8,7 +9,7 @@ const ModulesPage = () => {
   useEffect(() => {
     const fetchModules = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/modules");
+       const res = await axios.get(`${API_URL}/api/modules`);
         setModules(res.data);
       } catch (error) {
         console.error("Error fetching modules:", error);
